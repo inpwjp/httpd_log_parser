@@ -1,9 +1,5 @@
-require 'rubygems'
-require 'csv'
-require 'date'
-require 'digest/md5'
 
-module HttpLogParser
+module HttpdLogParser
   class Base
     attr_accessor :remote_host, :client_type, :user_name, :access_time, :request_code, :response_status, :object_bytes, :referer_uri, :user_agent, :request_method, :uri, :url, :query
     @@format = '%d/%b/%Y:%H:%M:%S %Z'

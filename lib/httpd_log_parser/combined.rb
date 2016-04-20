@@ -1,10 +1,9 @@
-require 'rubygems'
 require 'csv'
 require 'date'
 require 'digest/md5'
 
 module HttpdLogParser
-  class Combined < HttpdLogParser::Base
+  class Combined < Base
     def set_string(str)
       str.gsub!(/\[(\d+\/[a-zA-Z]{3}\/\d+.+?)\]/, "\"\\1\"")
       if str.include?(' ')
