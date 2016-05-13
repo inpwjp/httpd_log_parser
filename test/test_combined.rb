@@ -37,5 +37,9 @@ class TestCombined < Test::Unit::TestCase
     test "check request_code" do
       assert_equal( @apache_log.request_code, "GET /test/?query1=data1&query2=true HTTP/1.1")
     end
+
+    test "check request_method" do
+      assert_equal( @apache_log.request_method, "GET")
+    end
   end
 end
