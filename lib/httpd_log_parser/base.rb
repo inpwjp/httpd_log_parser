@@ -1,28 +1,43 @@
 
 module HttpdLogParser
   class Base
-    attr_accessor :remote_host, :client_type, :user_name, :access_time, :request_code, :response_status, :object_bytes, :referer_uri, :user_agent, :request_method, :uri, :url, :query
+    attr_accessor :remote_host, :client_type, :user_name, :access_time, :request_code, :response_status, :object_bytes, :referer_uri, :user_agent, :request_method, :uri, :url, :query, :filters, :ignore_extentions
     @@format = '%d/%b/%Y:%H:%M:%S %Z'
+    def initializer()
+      @ignore_extentions = []
+      @filters = []
+    end
 
-    def filter_log
+
+    def filters_log
       if access_time.nil?
         return nil
       end
 
-      yield
+
+      @ignore_extentions.each do |ignore_extention|
+        if /#{ignore_extention}$/ =~ self.url
+          return nil
+        end
+      end
+
+      @filters.each do |filter|
+        filter.call
+      end
 
       log
     end
 
-    def delete_images()
-      filter_log do
-        images = ["js", "css", "json", "png", "gif", "jpg","woff", "ico", "pdf", "mp3", "jsp", "xml"]
-        images.each do |image|
-          if /#{image}$/ =~ self.url
-            return nil
-          end
-        end
-      end
+    def add_filter(&function)
+      @filters << function
+    end
+
+
+    def set_delete_images()
+      images = ["png", "gif", "jpg", "ico", "pdf", "mp3", "jsp"]
+      @ignore_extentions += images
+
+      self
     end
   end
 end
