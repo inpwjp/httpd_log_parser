@@ -16,6 +16,9 @@ class TestBasic < Test::Unit::TestCase
       log_text = '192.168.1.1 user-identifier root [13/May/2016:13:47:42 +0900] "GET /test/?query1=data1&query2=true HTTP/1.1" 200 1234 "/referer/from" "test_agent" "192.168.2.1"' 
       @apache_log = HttpdLogParser::Combined.new
       @apache_log.set_string(log_text)
+      log_text = '192.168.1.1 - root [13/May/2016:13:47:42 +0900] "GET /test/?query1=data1&query2=true_data HTTP/1.1" 200 1234 - "test_agent" "192.168.2.1"' 
+      @apache_log2 = HttpdLogParser::Combined.new
+      @apache_log2.set_string(log_text)
     end
 
     test "check remote host" do
@@ -57,6 +60,14 @@ class TestBasic < Test::Unit::TestCase
     test "check user_agent" do
       assert_equal( @apache_log.user_agent, "test_agent")
     end
+
+    test "check to_unicage" do 
+      assert_not_nil(@apache_log.to_unicage)
+    end
+
+    test "check to_unicage2" do 
+      assert_not_nil(@apache_log2.to_unicage)
+    end
   end
 
   sub_test_case "common test" do
@@ -96,6 +107,10 @@ class TestBasic < Test::Unit::TestCase
 
     test "check object_bytes" do
       assert_equal( @apache_log.object_bytes, "1234")
+    end
+
+    test "check to_unicage" do 
+      assert_not_nil(@apache_log.to_unicage)
     end
   end
 
